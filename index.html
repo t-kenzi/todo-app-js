@@ -3,9 +3,58 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>ToDoリスト</title>
 </head>
 <body>
-    
+    <h1>ToDoリスト</h1>
+    <form id="taskForm">
+        <input type="text" id="taskTitle" placeholder="タスク名" required>
+        <select id="taskPriority">
+            <option value="high">高</option>
+            <option value="middle" selected>中</option>
+            <option value="low">低</option>
+        </select>
+    <form>
+    <button type="submit">追加</button>
+
+    <ul id="taskList"></ul>
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const form = document.getElementById('taskFrom');
+        const taskList = document.getElementById('taskList');
+
+        form.addEventListener('submit',handleFormSubmit);
+
+        function handleFormSubmit{
+            event.preventDefault();
+            const title = document.getElementsById('taskTitle').value.trim();
+
+            if(title ===''){
+                alert('タスク名を入力してください')
+                return;
+            }
+
+            const li = document.createElement('li');
+            li.textContent = title;
+            taskList.appendChild(li);
+            form.reset();
+
+        function getTaskData() {
+            return {
+            title: document.getElementById('task-title').value.trim(),
+            priority: document.getElementById('task-priority').value
+            };
+        }
+
+        function createTaskElement({ title, deadline, priority }) {
+            const li = document.createElement('li');
+            const labelMap = { high: '【高】', medium: '【中】', low: '【低】' };
+            li.textContent = '${priorityLabel} ${title}'
+            return li;
+        }
+        }
+ 
+    });
+    </script>
 </body>
 </html>
