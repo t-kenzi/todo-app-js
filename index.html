@@ -20,28 +20,29 @@
     <ul id="taskList"></ul>
     <script>
     document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('taskFrom');
-        const taskList = document.getElementById('taskList');
+        const form = document.getElementById('task-form');
+        const taskList = document.getElementById('task-list');
 
-        form.addEventListener('submit',handleFormSubmit);
+        form.addEventListener('submit', handleFormSubmit);
 
-        function handleFormSubmit{
+        function handleFormSubmit(event) {
             event.preventDefault();
-            const title = document.getElementsById('taskTitle').value.trim();
+            const task = getTaskData();
 
-            if(title ===''){
-                alert('タスク名を入力してください')
-                return;
+            if (task.title === '') {
+            alert('タスク名を入力してください');
+            return;
             }
 
-            const li = document.createElement('li');
-            li.textContent = title;
-            taskList.appendChild(li);
+            const taskElement = createTaskElement(task);
+            taskList.appendChild(taskElement);
             form.reset();
+        }
 
         function getTaskData() {
             return {
             title: document.getElementById('task-title').value.trim(),
+            deadline: document.getElementById('task-deadline').value,
             priority: document.getElementById('task-priority').value
             };
         }
@@ -49,11 +50,10 @@
         function createTaskElement({ title, deadline, priority }) {
             const li = document.createElement('li');
             const labelMap = { high: '【高】', medium: '【中】', low: '【低】' };
-            li.textContent = '${priorityLabel} ${title}'
+            const priorityLabel = labelMap[priority] || '';
+            li.textContent = `${priorityLabel} ${title} - ${deadline || '期限なし'}`;
             return li;
         }
-        }
- 
     });
     </script>
 </body>
