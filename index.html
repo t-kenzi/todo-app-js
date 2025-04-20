@@ -1,60 +1,70 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ToDoリスト</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ToDoリスト</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>ToDoリスト</h1>
-    <form id="taskForm">
-        <input type="text" id="taskTitle" placeholder="タスク名" required>
-        <select id="taskPriority">
-            <option value="high">高</option>
-            <option value="middle" selected>中</option>
-            <option value="low">低</option>
-        </select>
-    <form>
-    <button type="submit">追加</button>
+  <h1>ToDoリスト</h1>
 
-    <ul id="taskList"></ul>
-    <script>
-    document.addEventListener('DOMContentLoaded', () => {
-        const form = document.getElementById('task-form');
-        const taskList = document.getElementById('task-list');
+  <form id="taskForm">
+    <input class="task_value" type="text" required>
+    <button class="task_submit" type="submit">Add task</button>
+  </form>
 
-        form.addEventListener('submit', handleFormSubmit);
+  <div id="table">
+    <h2>Current Task</h2>
+    <ul class="task_list"></ul>
+  </div>
 
-        function handleFormSubmit(event) {
-            event.preventDefault();
-            const task = getTaskData();
+  <script>
+    const taskValue = document.getElementsByClassName('task_value')[0];
+    const taskForm = document.getElementById('taskForm');
+    const taskList = document.getElementsByClassName('task_list')[0];
 
-            if (task.title === '') {
-            alert('タスク名を入力してください');
-            return;
-            }
+    // タスクを追加する処理
+    const addTask = (task) => {
+      const listItem = document.createElement('li');
 
-            const taskElement = createTaskElement(task);
-            taskList.appendChild(taskElement);
-            form.reset();
-        }
+      // タスク内容（テキスト）
+      const taskText = document.createElement('span');
+      taskText.textContent = task;
 
-        function getTaskData() {
-            return {
-            title: document.getElementById('task-title').value.trim(),
-            deadline: document.getElementById('task-deadline').value,
-            priority: document.getElementById('task-priority').value
-            };
-        }
+      // 削除ボタン
+      const deleteButton = document.createElement('button');
+      deleteButton.textContent = 'Delete';
+      deleteButton.style.marginLeft = '8px';
+      deleteButton.style.color = 'red';
 
-        function createTaskElement({ title, deadline, priority }) {
-            const li = document.createElement('li');
-            const labelMap = { high: '【高】', medium: '【中】', low: '【低】' };
-            const priorityLabel = labelMap[priority] || '';
-            li.textContent = `${priorityLabel} ${title} - ${deadline || '期限なし'}`;
-            return li;
-        }
+      deleteButton.addEventListener('click', () => {
+        deleteTask(deleteButton);
+      });
+
+      // リストアイテムにテキストとボタンを追加
+      listItem.appendChild(taskText);
+      listItem.appendChild(deleteButton);
+      taskList.appendChild(listItem);
+    };
+
+    // タスク削除処理
+    const deleteTask = (deleteButton) => {
+      const listItem = deleteButton.closest('li');
+      taskList.removeChild(listItem);
+    };
+
+    // フォームの送信イベント
+    taskForm.addEventListener('submit', (evt) => {
+      evt.preventDefault();
+      const task = taskValue.value.trim();
+      if (task === '') {
+        alert('タスクを入力してください');
+        return;
+      }
+      addTask(task);
+      taskValue.value = '';
     });
-    </script>
+  </script>
 </body>
 </html>
